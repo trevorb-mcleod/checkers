@@ -3,6 +3,18 @@
     margin: 0; padding: 0; box-sizing: border-box;
 }
 
+/*
+ * --cell: the size of one board square.
+ * On desktop it stays at 72px.
+ * On small screens it shrinks so all 8 columns + 16px side padding fit in the viewport.
+ * Formula: (100vw - 32px) / 8  — 32px = 16px left + 16px right padding
+ */
+:root {
+    --cell: min(72px, calc((100vw - 32px) / 8));
+    --piece: calc(var(--cell) * 0.833);   /* 60/72 */
+    --crown: calc(var(--cell) * 0.361);   /* 26/72 */
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #0d1b2a 0%, #1b2838 50%, #0d2137 100%);
@@ -149,7 +161,7 @@ body {
 /* ── Game header row ──────────────────────────────────────────────────────── */
 .game-header {
     display: flex; align-items: center; justify-content: space-between;
-    width: 100%; max-width: 620px;
+    width: 100%; max-width: calc(var(--cell) * 8 + 16px);
 }
 .header-right { display: flex; align-items: center; gap: 10px; }
 .mode-badge {
@@ -274,8 +286,8 @@ h1 {
 /* ── Board Grid ───────────────────────────────────────────────────────────── */
 .board {
     display: grid;
-    grid-template-columns: repeat(8, 72px);
-    grid-template-rows:    repeat(8, 72px);
+    grid-template-columns: repeat(8, var(--cell));
+    grid-template-rows:    repeat(8, var(--cell));
     border: 3px solid #3b1a06;
     border-radius: 2px;
     overflow: hidden;
@@ -283,7 +295,7 @@ h1 {
 
 /* ── Cells ────────────────────────────────────────────────────────────────── */
 .cell {
-    width: 72px; height: 72px;
+    width: var(--cell); height: var(--cell);
     display: flex; align-items: center; justify-content: center;
     cursor: pointer; position: relative;
     transition: background-color .12s;
@@ -300,10 +312,10 @@ h1 {
 
 /* ── Pieces ───────────────────────────────────────────────────────────────── */
 .piece {
-    width: 60px; height: 60px;
+    width: var(--piece); height: var(--piece);
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 26px;
+    font-size: var(--crown);
     box-shadow: inset 0 -4px 7px rgba(0,0,0,.35), 2px 5px 10px rgba(0,0,0,.45);
     transition: transform .12s, box-shadow .12s;
     user-select: none; pointer-events: none;
@@ -344,7 +356,7 @@ h1 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 26px;
+    font-size: var(--crown);
     line-height: 1;
     color: #ffd700;
     text-shadow: 0 1px 4px rgba(0,0,0,.9), 0 0 8px rgba(255,215,0,.7);
@@ -435,5 +447,38 @@ h1 {
     color: rgba(255,255,255,.32);
     font-size: .78rem;
     letter-spacing: .5px;
+}
+
+/* ── Mobile responsive ────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+    /* Tighten outer padding so the board gets maximum width */
+    .game-wrapper { padding: 12px 4px; }
+
+    /* Stack header vertically */
+    .game-header { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .game-header h1 { font-size: 1.4rem; letter-spacing: 2px; }
+
+    /* Compress info bar */
+    .game-info {
+        gap: 12px;
+        padding: 10px 14px;
+        border-radius: 40px;
+        font-size: .85rem;
+        width: 100%;
+        justify-content: space-between;
+    }
+    .piece-sample { width: 30px; height: 30px; }
+    .piece-count  { font-size: 1.4rem; }
+
+    /* Turn indicator */
+    .turn-indicator { font-size: .8rem; min-width: 120px; padding: 5px 12px; }
+
+    /* New game button */
+    .new-game-btn { font-size: .72rem; padding: 6px 14px; }
+
+    /* Settings bar */
+    .settings-bar { flex-wrap: wrap; gap: 8px; }
+    .toggle-label { padding: 6px 14px; }
+    .setting-text { font-size: .78rem; }
 }
 
