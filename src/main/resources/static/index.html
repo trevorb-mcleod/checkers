@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkers</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- SCREEN 1 — Mode selection -->
+<div id="screen-select" class="screen">
+    <div class="select-container">
+        <h1 class="select-title">♟ Checkers</h1>
+        <p class="select-sub">Choose how you want to play</p>
+
+        <div class="mode-cards">
+            <button class="mode-card" id="btn-cpu">
+                <span class="mode-icon">🤖</span>
+                <span class="mode-name">vs CPU</span>
+                <span class="mode-desc">Challenge the computer</span>
+            </button>
+            <button class="mode-card" id="btn-local">
+                <span class="mode-icon">👥</span>
+                <span class="mode-name">Local Play</span>
+                <span class="mode-desc">Two players, one screen</span>
+            </button>
+            <button class="mode-card" id="btn-online">
+                <span class="mode-icon">🌐</span>
+                <span class="mode-name">Play Online</span>
+                <span class="mode-desc">Challenge a friend remotely</span>
+            </button>
+        </div>
+
+        <!-- Online sub-panel -->
+        <div id="online-panel" class="online-panel hidden">
+            <button class="online-action-btn" id="btn-create">🎮 Create Game</button>
+            <div class="or-divider"><span>or</span></div>
+            <div class="join-row">
+                <input id="join-code-input" type="text" maxlength="4"
+                       placeholder="Enter 4-digit code" autocomplete="off">
+                <button id="btn-join-code">Join →</button>
+            </div>
+            <button class="back-link" id="btn-online-back">← Back</button>
+        </div>
+    </div>
+</div>
+
+<!-- SCREEN 2 — Waiting for opponent -->
+<div id="screen-waiting" class="screen hidden">
+    <div class="waiting-container">
+        <div class="waiting-spinner">⏳</div>
+        <h2 class="waiting-title">Waiting for opponent…</h2>
+        <p class="waiting-sub">Share this code or link with your friend</p>
+        <div class="code-box" id="waiting-code">----</div>
+        <div class="invite-row">
+            <input id="invite-link-input" type="text" readonly>
+            <button id="btn-copy-link">📋 Copy</button>
+        </div>
+        <p id="copy-feedback" class="copy-feedback hidden">✅ Copied!</p>
+        <button class="cancel-btn" id="btn-cancel-wait">✕ Cancel</button>
+    </div>
+</div>
+
+<!-- SCREEN 3 — Game -->
+<div id="screen-game" class="screen hidden">
+<div class="game-wrapper">
+    <div class="game-container">
+        <div class="game-header">
+            <h1>♟ Checkers</h1>
+            <div class="header-right">
+                <span id="mode-badge" class="mode-badge hidden"></span>
+                <button class="menu-btn" id="btn-back-menu">☰ Menu</button>
+            </div>
+        </div>
+
+        <div class="game-info">
+            <div class="player-card red-card">
+                <div class="piece-sample red-sample"></div>
+                <div class="player-details">
+                    <span class="player-label">Red</span>
+                    <span class="piece-count" id="red-count">12</span>
+                </div>
+            </div>
+
+            <div class="center-panel">
+                <div id="turn-indicator" class="turn-indicator turn-red">Red's Turn</div>
+                <button id="new-game-btn" class="new-game-btn">New Game</button>
+            </div>
+
+            <div class="player-card black-card">
+                <div class="piece-sample black-sample"></div>
+                <div class="player-details">
+                    <span class="player-label">Black</span>
+                    <span class="piece-count" id="black-count">12</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="board-frame">
+            <div id="board" class="board"></div>
+        </div>
+
+        <div class="settings-bar">
+            <label class="toggle-label" title="When ON, you must jump if a capture is available">
+                <span class="setting-text">Forced Jumps</span>
+                <div class="toggle-track">
+                    <input type="checkbox" id="forced-jumps-toggle" checked>
+                    <span class="toggle-thumb"></span>
+                </div>
+            </label>
+        </div>
+
+        <p class="hint">Select a piece, then click a highlighted square to move</p>
+    </div>
+</div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
+
