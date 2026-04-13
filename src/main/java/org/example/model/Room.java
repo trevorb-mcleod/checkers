@@ -1,25 +1,34 @@
 package org.example.model;
 
+import org.example.service.BattleshipGameService;
 import org.example.service.CheckersGameService;
+import org.example.service.Connect4GameService;
 
 /**
  * Represents one game session.  Modes: "LOCAL", "CPU", "ONLINE".
+ * GameTypes: "CHECKERS", "BATTLESHIP".
  */
 public class Room {
 
     private final String code;
     private final String mode;
-    private final String redSessionId;      // creator
-    private       String blackSessionId;    // joiner; "CPU" for CPU mode; null while waiting
-    private final CheckersGameService game;
+    private final String gameType;
+    private final String redSessionId;
+    private       String blackSessionId;
+    private final CheckersGameService   checkersGame;
+    private final BattleshipGameService battleshipGame;
+    private final Connect4GameService   connect4Game;
     private long lastActivity;
 
-    public Room(String code, String mode, String redSessionId) {
+    public Room(String code, String mode, String gameType, String redSessionId) {
         this.code           = code;
         this.mode           = mode;
+        this.gameType       = gameType != null ? gameType : "CHECKERS";
         this.redSessionId   = redSessionId;
         this.blackSessionId = "CPU".equals(mode) ? "CPU" : null;
-        this.game           = new CheckersGameService();
+        this.checkersGame   = "CHECKERS" .equals(this.gameType) ? new CheckersGameService()   : null;
+        this.battleshipGame = "BATTLESHIP".equals(this.gameType) ? new BattleshipGameService() : null;
+        this.connect4Game   = "CONNECT4"  .equals(this.gameType) ? new Connect4GameService()   : null;
         this.lastActivity   = System.currentTimeMillis();
     }
 
@@ -45,10 +54,12 @@ public class Room {
 
     public String                getCode()           { return code; }
     public String                getMode()           { return mode; }
+    public String                getGameType()       { return gameType; }
     public String                getRedSessionId()   { return redSessionId; }
     public String                getBlackSessionId() { return blackSessionId; }
     public void                  setBlackSessionId(String id) { this.blackSessionId = id; }
-    public CheckersGameService   getGame()           { return game; }
+    public CheckersGameService   getGame()           { return checkersGame; }
+    public BattleshipGameService getBattleshipGame() { return battleshipGame; }
+    public Connect4GameService   getConnect4Game()   { return connect4Game; }
     public long                  getLastActivity()   { return lastActivity; }
 }
-

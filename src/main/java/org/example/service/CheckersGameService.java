@@ -291,8 +291,30 @@ public class CheckersGameService {
     // -------------------------------------------------------------------------
 
     private void checkWinCondition() {
-        if (countPieces(true) == 0)       status = "BLACK_WINS";
-        else if (countPieces(false) == 0) status = "RED_WINS";
+        if (countPieces(true) == 0) {
+            status = "BLACK_WINS";
+            return;
+        }
+        if (countPieces(false) == 0) {
+            status = "RED_WINS";
+            return;
+        }
+        // Stalemate: current player has no legal moves → they lose
+        boolean currentHasMoves = false;
+        outer:
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                if (isOwnedBy(board[r][c], currentPlayer)) {
+                    if (!jumpsForPiece(r, c).isEmpty() || !simpleMovesForPiece(r, c).isEmpty()) {
+                        currentHasMoves = true;
+                        break outer;
+                    }
+                }
+            }
+        }
+        if (!currentHasMoves) {
+            status = "RED".equals(currentPlayer) ? "BLACK_WINS" : "RED_WINS";
+        }
     }
 
     // -------------------------------------------------------------------------

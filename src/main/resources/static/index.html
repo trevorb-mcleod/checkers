@@ -3,15 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkers</title>
+    <title>Game Hub</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- SCREEN 1 — Mode selection -->
-<div id="screen-select" class="screen">
+<!-- ════════════════════════════════════════════════════════════
+     SCREEN 0 — Game select
+     ════════════════════════════════════════════════════════════ -->
+<div id="screen-game-select" class="screen">
     <div class="select-container">
-        <h1 class="select-title">♟ Checkers</h1>
+        <h1 class="select-title">🎮 Game Hub</h1>
+        <p class="select-sub">Choose a game to play</p>
+        <div class="mode-cards">
+            <button class="mode-card" id="btn-game-checkers">
+                <span class="mode-icon">♟</span>
+                <span class="mode-name">Checkers</span>
+                <span class="mode-desc">Classic board strategy</span>
+            </button>
+            <button class="mode-card" id="btn-game-battleship">
+                <span class="mode-icon">⚓</span>
+                <span class="mode-name">Battleship</span>
+                <span class="mode-desc">Sink the enemy fleet</span>
+            </button>
+            <button class="mode-card" id="btn-game-connect4">
+                <span class="mode-icon">🔴</span>
+                <span class="mode-name">Connect 4</span>
+                <span class="mode-desc">Drop and align four</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SCREEN 1 — Mode selection
+     ════════════════════════════════════════════════════════════ -->
+<div id="screen-select" class="screen hidden">
+    <div class="select-container">
+        <h1 class="select-title" id="mode-select-title">♟ Checkers</h1>
         <p class="select-sub">Choose how you want to play</p>
 
         <div class="mode-cards">
@@ -43,10 +72,14 @@
             </div>
             <button class="back-link" id="btn-online-back">← Back</button>
         </div>
+
+        <button class="back-link" id="btn-back-game-select" style="margin-top:8px">← Games</button>
     </div>
 </div>
 
-<!-- SCREEN 2 — Waiting for opponent -->
+<!-- ════════════════════════════════════════════════════════════
+     SCREEN 2 — Waiting for opponent
+     ════════════════════════════════════════════════════════════ -->
 <div id="screen-waiting" class="screen hidden">
     <div class="waiting-container">
         <div class="waiting-spinner">⏳</div>
@@ -62,7 +95,9 @@
     </div>
 </div>
 
-<!-- SCREEN 3 — Game -->
+<!-- ════════════════════════════════════════════════════════════
+     SCREEN 3 — Checkers game
+     ════════════════════════════════════════════════════════════ -->
 <div id="screen-game" class="screen hidden">
 <div class="game-wrapper">
     <div class="game-container">
@@ -116,6 +151,143 @@
 </div>
 </div>
 
+<!-- ════════════════════════════════════════════════════════════
+     SCREEN 4 — Connect Four game
+     ════════════════════════════════════════════════════════════ -->
+<div id="screen-connect4" class="screen hidden">
+<div class="game-wrapper">
+    <div class="game-container">
+        <div class="game-header">
+            <h1>🔴 Connect 4</h1>
+            <div class="header-right">
+                <span id="c4-mode-badge" class="mode-badge hidden"></span>
+                <button class="menu-btn" id="btn-c4-back-menu">☰ Menu</button>
+            </div>
+        </div>
+
+        <div class="game-info">
+            <div class="player-card red-card">
+                <div class="piece-sample red-sample"></div>
+                <div class="player-details">
+                    <span class="player-label">Red</span>
+                </div>
+            </div>
+
+            <div class="center-panel">
+                <div id="c4-turn-indicator" class="turn-indicator turn-red">Red's Turn</div>
+                <button id="c4-new-game-btn" class="new-game-btn">New Game</button>
+            </div>
+
+            <div class="player-card black-card">
+                <div class="piece-sample black-sample"></div>
+                <div class="player-details">
+                    <span class="player-label">Black</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="board-frame">
+            <div id="c4-board" class="c4-board"></div>
+        </div>
+
+        <div id="c4-col-buttons" class="c4-col-buttons"></div>
+
+        <p class="hint">Click a column to drop your piece</p>
+    </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SCREEN 4 — Battleship game
+     ════════════════════════════════════════════════════════════ -->
+<div id="screen-battleship" class="screen hidden">
+<div class="game-wrapper">
+  <div class="game-container">
+
+    <div class="game-header">
+        <h1>⚓ Battleship</h1>
+        <div class="header-right">
+            <span id="bs-mode-badge" class="mode-badge hidden"></span>
+            <button class="menu-btn" id="btn-bs-back-menu">☰ Menu</button>
+        </div>
+    </div>
+
+    <!-- Placement phase UI -->
+    <div id="bs-placing-panel">
+        <div id="bs-placing-title" class="bs-phase-title">🔴 Red — Place your ships</div>
+        <div class="bs-ship-list" id="bs-ship-list"></div>
+        <div class="bs-orient-row">
+            <button class="bs-rotate-btn" id="bs-rotate-btn">🔄 Rotate (Horizontal)</button>
+        </div>
+        <div class="bs-hint">Click a cell on your grid to place the highlighted ship</div>
+    </div>
+
+    <!-- Battle phase UI -->
+    <div id="bs-battle-panel" class="hidden">
+        <div id="bs-turn-indicator" class="turn-indicator turn-red">Red's Turn</div>
+    </div>
+
+    <!-- Grids -->
+    <div class="bs-grids-container">
+        <!-- Own fleet grid -->
+        <div class="bs-grid-wrapper">
+            <div class="bs-grid-label" id="bs-my-label">Your Fleet</div>
+            <div class="bs-grid-frame">
+                <div class="bs-coords-col">
+                    <div></div><!-- corner -->
+                    <div>A</div><div>B</div><div>C</div><div>D</div><div>E</div>
+                    <div>F</div><div>G</div><div>H</div><div>I</div><div>J</div>
+                </div>
+                <div>
+                    <div class="bs-coords-row">
+                        <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div>
+                        <div>6</div><div>7</div><div>8</div><div>9</div><div>10</div>
+                    </div>
+                    <div id="bs-my-grid" class="bs-grid"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enemy target grid -->
+        <div class="bs-grid-wrapper" id="bs-enemy-wrapper">
+            <div class="bs-grid-label">Enemy Waters</div>
+            <div class="bs-grid-frame">
+                <div class="bs-coords-col">
+                    <div></div>
+                    <div>A</div><div>B</div><div>C</div><div>D</div><div>E</div>
+                    <div>F</div><div>G</div><div>H</div><div>I</div><div>J</div>
+                </div>
+                <div>
+                    <div class="bs-coords-row">
+                        <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div>
+                        <div>6</div><div>7</div><div>8</div><div>9</div><div>10</div>
+                    </div>
+                    <div id="bs-enemy-grid" class="bs-grid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="bs-new-game-btn" class="new-game-btn hidden">New Game</button>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     OVERLAY — Pass-and-play screen cover (battleship local)
+     ════════════════════════════════════════════════════════════ -->
+<div id="pass-overlay" class="pass-overlay hidden">
+    <div class="pass-box">
+        <div class="pass-lock">🔒</div>
+        <h2 class="pass-title" id="pass-title">Hand device to Player 2</h2>
+        <p  class="pass-sub"   id="pass-sub">When they are ready, tap below</p>
+        <p  class="pass-result" id="pass-result"></p>
+        <button class="pass-ready-btn" id="pass-ready-btn">I'm Ready →</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7/bundles/stomp.umd.min.js"></script>
 <script src="game.js"></script>
 </body>
 </html>

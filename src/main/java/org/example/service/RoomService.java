@@ -21,21 +21,22 @@ public class RoomService {
      * Create a new room for the given session.
      * Modes: "LOCAL", "CPU", "ONLINE".
      */
-    public Room createRoom(String sessionId, String mode) {
-        // Evict any previous local room this session owned
+    public Room createRoom(String sessionId, String mode, String gameType) {
         String oldCode = sessionToCode.remove(sessionId);
         if (oldCode != null) {
             Room old = rooms.get(oldCode);
-            if (old != null && sessionId.equals(old.getRedSessionId())) {
-                rooms.remove(oldCode);
-            }
+            if (old != null && sessionId.equals(old.getRedSessionId())) rooms.remove(oldCode);
         }
-
         String code = generateCode();
-        Room room   = new Room(code, mode, sessionId);
+        Room room   = new Room(code, mode, gameType, sessionId);
         rooms.put(code, room);
         sessionToCode.put(sessionId, code);
         return room;
+    }
+
+    /** Back-compat overload — defaults to CHECKERS. */
+    public Room createRoom(String sessionId, String mode) {
+        return createRoom(sessionId, mode, "CHECKERS");
     }
 
     /**
